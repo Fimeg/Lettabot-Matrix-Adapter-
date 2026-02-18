@@ -1,0 +1,52 @@
+# LettaBot Configuration
+# Copy this to lettabot.yaml and fill in your values.
+# 
+# Server modes:
+# - 'cloud': Use Letta Cloud (api.letta.com) with API key
+# - 'selfhosted': Use self-hosted Letta server
+
+server:
+  mode: cloud
+  # For cloud mode, set your API key (get one at https://app.letta.com):
+  apiKey: sk-let-YOUR-API-KEY
+  # For selfhosted mode, uncomment and set the base URL:
+  # mode: selfhosted
+  # baseUrl: http://localhost:8283
+
+agent:
+  name: LettaBot
+  # Model to use:
+  # - Free plan: zai/glm-4.7, minimax/MiniMax-M1-80k
+  # - BYOK: lc-anthropic/claude-sonnet-4-5-20250929, lc-openai/gpt-5.2
+  model: zai/glm-4.7
+
+# BYOK Providers (optional, cloud mode only)
+# These will be synced to Letta Cloud on startup
+# providers:
+#   - id: anthropic
+#     name: lc-anthropic
+#     type: anthropic
+#     apiKey: sk-ant-YOUR-ANTHROPIC-KEY
+#   - id: openai
+#     name: lc-openai
+#     type: openai
+#     apiKey: sk-YOUR-OPENAI-KEY
+
+channels:
+  telegram:
+    enabled: true
+    token: YOUR-TELEGRAM-BOT-TOKEN
+    dmPolicy: pairing  # 'pairing', 'allowlist', or 'open'
+  # slack:
+  #   enabled: true
+  #   appToken: xapp-...
+  #   botToken: xoxb-...
+  # whatsapp:
+  #   enabled: true
+  #   selfChat: false
+
+features:
+  cron: false
+  heartbeat:
+    enabled: false
+    intervalMin: 30

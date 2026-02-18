@@ -1,0 +1,154 @@
+/**
+ * LettaBot Configuration Types
+ *
+ * Two modes:
+ * 1. Self-hosted: Uses baseUrl (e.g., http://localhost:8283), no API key
+ * 2. Letta Cloud: Uses apiKey, optional BYOK providers
+ */
+
+export interface LettaBotConfig {
+	// Server connection
+	server: {
+		// 'cloud' (api.letta.com) or 'selfhosted'
+		mode: "cloud" | "selfhosted";
+		// Only for selfhosted mode
+		baseUrl?: string;
+		// Only for cloud mode
+		apiKey?: string;
+	};
+
+	// Agent configuration
+	agent: {
+		id?: string;
+		name: string;
+		model: string;
+		conversationId?: string;
+	};
+
+	// BYOK providers (cloud mode only)
+	providers?: ProviderConfig[];
+
+	// Channel configurations
+	channels: {
+		telegram?: TelegramConfig;
+		slack?: SlackConfig;
+		whatsapp?: WhatsAppConfig;
+		signal?: SignalConfig;
+		discord?: DiscordConfig;
+		matrix?: MatrixConfig;
+	};
+
+	// Features
+	features?: {
+		cron?: boolean;
+		heartbeat?: {
+			enabled: boolean;
+			intervalMin?: number;
+			conversationId?: string;
+			rawOutputRoomId?: string;
+			rawOutputChannel?: string;
+		};
+	};
+
+	// Integrations (Google Workspace, etc.)
+	integrations?: {
+		google?: GoogleConfig;
+	};
+}
+
+export interface ProviderConfig {
+	id: string; // e.g., 'anthropic', 'openai'
+	name: string; // e.g., 'lc-anthropic'
+	type: string; // e.g., 'anthropic', 'openai'
+	apiKey: string;
+}
+
+export interface TelegramConfig {
+	enabled: boolean;
+	token?: string;
+	dmPolicy?: "pairing" | "allowlist" | "open";
+	allowedUsers?: string[];
+}
+
+export interface SlackConfig {
+	enabled: boolean;
+	appToken?: string;
+	botToken?: string;
+	allowedUsers?: string[];
+}
+
+export interface WhatsAppConfig {
+	enabled: boolean;
+	selfChat?: boolean;
+	dmPolicy?: "pairing" | "allowlist" | "open";
+	allowedUsers?: string[];
+}
+
+export interface SignalConfig {
+	enabled: boolean;
+	phone?: string;
+	selfChat?: boolean;
+	dmPolicy?: "pairing" | "allowlist" | "open";
+	allowedUsers?: string[];
+}
+
+export interface DiscordConfig {
+	enabled: boolean;
+	token?: string;
+	dmPolicy?: "pairing" | "allowlist" | "open";
+	allowedUsers?: string[];
+}
+
+export interface MatrixConfig {
+	enabled: boolean;
+	homeserverUrl?: string;
+	accessToken?: string;
+	userId?: string;
+	password?: string;
+	deviceId?: string;
+	storagePath?: string;
+	cryptoStoragePath?: string;
+	storeDir?: string;
+	encryptionEnabled?: boolean;
+	recoveryKey?: string;
+	autoJoinRooms?: boolean;
+	dmPolicy?: "pairing" | "allowlist" | "open";
+	allowedUsers?: string[];
+	messagePrefix?: string;
+	selfChatMode?: boolean;
+	// Voice and audio features
+	transcriptionEnabled?: boolean;
+	sttUrl?: string;
+	ttsUrl?: string;
+	ttsVoice?: string;
+	enableAudioResponse?: boolean;
+	audioRoomFilter?: "dm_only" | "all" | "none";
+	// Queue and conversations
+	queueEnabled?: boolean;
+	maxQueueSize?: number;
+	perRoomConversations?: boolean;
+	conversationStaleMinutes?: number;
+	// Image and reactions
+	imageMaxSize?: number;
+	enableReactions?: boolean;
+	// Pantalaimon E2EE proxy
+	pantalaimonUrl?: string;
+}
+
+export interface GoogleConfig {
+	enabled: boolean;
+	account?: string;
+	services?: string[]; // e.g., ['gmail', 'calendar', 'drive', 'contacts', 'docs', 'sheets']
+}
+
+// Default config
+export const DEFAULT_CONFIG: LettaBotConfig = {
+	server: {
+		mode: "cloud",
+	},
+	agent: {
+		name: "LettaBot",
+		model: "zai/glm-4.7", // Free model default
+	},
+	channels: {},
+};
